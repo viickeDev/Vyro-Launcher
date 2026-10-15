@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vyro OGFN Launcher</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Inter, Arial, sans-serif;
+    background: #050507;
+    color: white;
+    overflow: hidden;
+}
+
+/* =========================
+   APP
+========================= */
+
+.app {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background:
+        radial-gradient(circle at 70% 20%, rgba(125, 30, 255, .08), transparent 35%),
+        #050507;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+    width: 70px;
+    min-width: 70px;
+    height: 100vh;
+    background: #08090c;
+    border-right: 1px solid #191a20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.logo {
+    color: #9c35ff;
+    font-size: 29px;
+    font-weight: 900;
+    margin-bottom: 25px;
+    text-shadow: 0 0 18px rgba(156,53,255,.5);
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    width: 100%;
+    align-items: center;
+}
+
+.nav button {
+    width: 54px;
+    height: 54px;
+    border: none;
+    border-radius: 14px;
+    background: transparent;
+    color: #747783;
+    cursor: pointer;
+    font-size: 21px;
+    transition: .2s;
+}
+
+.nav button:hover {
+    background: #15131b;
+    color: #b75aff;
+}
+
+.nav button.active {
+    background: linear-gradient(145deg, #251433, #17111f);
+    color: #b04cff;
+    box-shadow: inset 2px 0 #a83dff;
+}
+
+.logout {
+    margin-top: auto;
+    margin-bottom: 18px;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main {
+    flex: 1;
+    height: 100vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.page {
+    display: none;
+    min-height: 100vh;
+    padding: 28px 25px 50px;
+}
+
+.page.active {
+    display: block;
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.page-title {
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.page-subtitle {
+    color: #6f717c;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.top-icons {
+    display: flex;
+    gap: 15px;
+    color: #777985;
+    font-size: 18px;
+}
+
+/* =========================
+   HOME HERO
+========================= */
+
+.hero {
+    height: 300px;
+    border-radius: 17px;
+    overflow: hidden;
+    position: relative;
+    background:
+        linear-gradient(90deg, rgba(5,7,12,.94), rgba(5,7,12,.20)),
+        linear-gradient(0deg, rgba(3,5,9,.85), transparent 65%),
+        url("https://cdn2.unrealengine.com/fortnite-chapter-1-season-7-1920x1080-6a1c8b9a1c0a.jpg");
+    background-size: cover;
+    background-position: center;
+    border: 1px solid #20232c;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(0,0,0,.65), transparent 70%);
+}
+
+.profile-pill {
+    position: absolute;
+    top: 17px;
+    left: 17px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: rgba(22,23,30,.8);
+    backdrop-filter: blur(12px);
+    padding: 8px 14px 8px 8px;
+    border-radius: 25px;
+    font-size: 12px;
+}
+
+.avatar {
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#7436ff,#c55aff);
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+}
+
+.hero-content {
+    position: absolute;
+    left: 20px;
+    bottom: 23px;
+}
+
+.hero-label {
+    color: #ae55ff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .8px;
+    margin-bottom: 7px;
+}
+
+.hero h1 {
+    font-size: 25px;
+    margin-bottom: 14px;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 9px;
+}
+
+.btn {
+    border: none;
+    border-radius: 10px;
+    padding: 11px 19px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.12);
+}
+
+.btn-purple {
+    background: linear-gradient(135deg,#9638ed,#7031c8);
+}
+
+.btn-dark {
+    background: rgba(35,36,43,.9);
+    border: 1px solid #383942;
+}
+
+/* =========================
+   FEATURE
+========================= */
+
+.feature {
+    height: 190px;
+    margin-top: 15px;
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #1b1e26;
+    background:
+        linear-gradient(90deg, rgba(5,7,12,.90), rgba(5,7,12,.18)),
+        url("https://cdn2.unrealengine.com/fortnite-chapter-1-season-7-1920x1080-6a1c8b9a1c0a.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.feature-content {
+    position: absolute;
+    bottom: 18px;
+    left: 18px;
+    max-width: 540px;
+}
+
+.feature-date {
+    color: #aaaeba;
+    font-size: 10px;
+    margin-bottom: 7px;
+}
+
+.feature h2 {
+    font-size: 15px;
+    margin-bottom: 7px;
+}
+
+.feature p {
+    font-size: 11px;
+    line-height: 1.6;
+    color: #c2c5ce;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats-title {
+    margin-top: 25px;
+    margin-bottom: 12px;
+    font-size: 11px;
+    color: #70727e;
+    letter-spacing: .5px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.stat {
+    background: #0a0b0f;
+    border: 1px solid #1d1e24;
+    border-radius: 13px;
+    padding: 15px;
+}
+
+.stat-name {
+    color: #70727e;
+    font-size: 10px;
+    margin-bottom: 7px;
+}
+
+.stat-value {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* =========================
+   LIBRARY
+========================= */
+
+.library-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(245px,1fr));
+    gap: 18px;
+}
+
+.build-card {
+    background: #090a0d;
+    border: 1px solid #24242b;
+    border-radius: 17px;
+    overflow: hidden;
+    transition: .2s;
+}
+
+.build-card:hover {
+    transform: translateY(-3px);
+    border-color: #8735c9;
+    box-shadow: 0 10px 35px rgba(126,37,190,.12);
+}
+
+.build-image {
+    height: 145px;
+    position: relative;
+    background:
+        linear-gradient(0deg, rgba(0,0,0,.5), transparent),
+        url("https://cdn2.unrealengine.com/fortnite-og-season-7-1920x1080.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.active-label {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: #a33fff;
+    padding: 5px 9px;
+    border-radius: 10px;
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.build-info {
+    padding: 13px;
+}
+
+.build-name {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.build-version {
+    font-size: 10px;
+    color: #777985;
+    margin-top: 5px;
+}
+
+.build-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 13px;
+}
+
+.play {
+    flex: 1;
+    background: linear-gradient(135deg,#a43eff,#7e2fd3);
+    border: none;
+    border-radius: 9px;
+    color: white;
+    padding: 9px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.delete {
+    width: 35px;
+    background: #15161b;
+    border: 1px solid #282930;
+    color: #777985;
+    border-radius: 9px;
+    cursor: pointer;
+}
+
+/* =========================
+   ADD BUILD
+========================= */
+
+.add-build {
+    margin-left: auto;
+    background: linear-gradient(135deg,#a944ff,#8836dd);
+    border: none;
+    color: white;
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* =========================
+   SHOP
+========================= */
+
+.shop-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+    gap: 17px;
+}
+
+.shop-card {
+    background: #0a0b0f;
+    border: 1px solid #1d1f27;
+    border-radius: 15px;
+    padding: 18px;
+    min-height: 180px;
+}
+
+.shop-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 13px;
+    background: linear-gradient(135deg,#7524ba,#bd4fff);
+    display: grid;
+    place-items: center;
+    font-size: 21px;
+    margin-bottom: 17px;
+}
+
+.shop-card h3 {
+    font-size: 14px;
+    margin-bottom: 7px;
+}
+
+.shop-card p {
+    color: #747680;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+/* =========================
+   SETTINGS
+========================= */
+
+.settings-box {
+    max-width: 700px;
+    background: #090a0d;
+    border: 1px solid #1d1e25;
+    border-radius: 16px;
+    padding: 22px;
+}
+
+.setting {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 17px 0;
+    border-bottom: 1px solid #1a1b21;
+}
+
+.setting:last-child {
+    border-bottom: none;
+}
+
+.setting h3 {
+    font-size: 13px;
+}
+
+.setting p {
+    color: #70727e;
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+.switch {
+    width: 43px;
+    height: 24px;
+    background: #292a31;
+    border-radius: 30px;
+    position: relative;
+    cursor: pointer;
+}
+
+.switch::after {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: #aaa;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: .2s;
+}
+
+.switch.on {
+    background: #9138dc;
+}
+
+.switch.on::after {
+    left: 22px;
+    background: white;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-screen {
+    position: fixed;
+    inset: 0;
+    background: #050608;
+    z-index: 100;
+    display: none;
+}
+
+.login-screen.show {
+    display: flex;
+}
+
+.login-left {
+    width: 31%;
+    min-width: 390px;
+    background:
+        radial-gradient(circle at 50% 10%,rgba(108,34,153,.09),transparent 35%),
+        #08090c;
+    display: flex;
+    flex-direction: column;
+    padding: 70px 43px;
+    justify-content: center;
+}
+
+.login-logo {
+    text-align: center;
+    color: #a537ff;
+    font-size: 60px;
+    font-weight: 900;
+    margin-bottom: 65px;
+    text-shadow: 0 0 30px rgba(164,55,255,.35);
+}
+
+.login-title {
+    font-size: 34px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.input-label {
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.input {
+    width: 100%;
+    background: #151619;
+    border: 1px solid #303138;
+    color: white;
+    padding: 15px;
+    border-radius: 9px;
+    outline: none;
+    margin-bottom: 18px;
+}
+
+.input:focus {
+    border-color: #9544dd;
+}
+
+.remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    margin: 2px 0 20px;
+}
+
+.sign-in {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #7b3ff2;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.or {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 25px 0;
+    color: #777985;
+    font-size: 11px;
+}
+
+.or div {
+    flex: 1;
+    height: 1px;
+    background: #363740;
+}
+
+.discord {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: #5865f2;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.login-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 28px;
+    font-size: 11px;
+    color: #aaa;
+}
+
+.login-links span {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.login-background {
+    flex: 1;
+    background:
+        linear-gradient(90deg,rgba(7,9,13,.15),rgba(7,9,13,.15)),
+        url("https://cdn2.unrealengine.com/fortnite-chapter-1-season-7-1920x1080-6a1c8b9a1c0a.jpg");
+    background-size: cover;
+    background-position: center;
+    filter: blur(1px);
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,.75);
+    z-index: 50;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    width: 420px;
+    background: #0d0e12;
+    border: 1px solid #292a31;
+    border-radius: 17px;
+    padding: 25px;
+    box-shadow: 0 30px 100px rgba(0,0,0,.5);
+}
+
+.modal-box h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.modal-input {
+    width: 100%;
+    background: #17181c;
+    border: 1px solid #303139;
+    color: white;
+    padding: 13px;
+    border-radius: 9px;
+    outline: none;
+    margin-bottom: 13px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.modal-buttons button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 9px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.cancel {
+    background: #1b1c22;
+    color: white;
+}
+
+.confirm {
+    background: #963ee9;
+    color: white;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #17181d;
+    border: 1px solid #33343c;
+    padding: 13px 17px;
+    border-radius: 10px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: .3s;
+    z-index: 200;
+    font-size: 12px;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px) {
+    .stats {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .login-left {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .login-background {
+        display: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">V</div>
+
+        <div class="nav">
+
+            <button class="active" onclick="showPage('home',this)" title="Home">
+                ⌂
+            </button>
+
+            <button onclick="showPage('library',this)" title="Library">
+                ▦
+            </button>
+
+            <button onclick="showPage('shop',this)" title="Shop">
+                🛒
+            </button>
+
+            <button onclick="showPage('settings',this)" title="Settings">
+                ⚙
+            </button>
+
+        </div>
+
+        <button class="nav logout" onclick="logout()" title="Logout">
+            ⇥
+        </button>
+
+    </aside>
+
+
+    <main class="main">
+
+        <!-- ================= HOME ================= -->
+
+        <section id="home" class="page active">
+
+            <div class="topbar">
+
+                <div>
+                    <div class="page-title">Home</div>
+                    <div class="page-subtitle">
+                        Welcome back to Vyro OGFN
+                    </div>
+                </div>
+
+                <div class="top-icons">
+                    ♧
+                    ◉
+                    −
+                    ×
+                </div>
+
+            </div>
+
+
+            <div class="hero">
+
+                <div class="profile-pill">
+
+                    <div class="avatar" id="avatar">
+                        V
+                    </div>
+
+                    <span id="username">
+                        Guest
+                    </span>
+
+                </div>
+
+
+                <div class="hero-content">
+
+                    <div class="hero-label">
+                        NOW PLAYING
+                    </div>
+
+                    <h1 id="selectedBuild">
+                        No Build Selected
+                    </h1>
+
+                    <div class="hero-buttons">
+
+                        <button class="btn btn-dark"
+                                onclick="showPage('library')">
+                            Library
+                        </button>
+
+                        <button class="btn btn-purple"
+                                onclick="playSelected()">
+                            ▶ Play
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-content">
+
+                    <div class="feature-date">
+                        DEC 6, 2018
+                    </div>
+
+                    <h2>
+                        Return to Chapter 1: Season 7
+                    </h2>
+
+                    <p>
+                        The ice spreads across the island.
+                        The Ice King awakens, Lynx prowls,
+                        and the Battle Bus drops into a winter warzone.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="stats-title">
+                YOUR STATS
+            </div>
+
+            <div class="stats">
+
+                <div class="stat">
+                    <div class="stat-name">ARENA</div>
+                    <div class="stat-value">0</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-name">KILLS</div>
+                    <div class="stat-value">0</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-name">WINS</div>
+                    <div class="stat-value">0</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-name">K/D</div>
+                    <div class="stat-value">0.0</div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= LIBRARY ================= -->
+
+        <section id="library" class="page">
+
+            <div class="topbar">
+
+                <div>
+                    <div class="page-title">
+                        Library
+                    </div>
+
+                    <div class="page-subtitle">
+                        Your installed builds
+                    </div>
+                </div>
+
+                <button class="add-build"
+                        onclick="openBuildModal()">
+                    + Add Build
+                </button>
+
+            </div>
+
+
+            <div class="library-grid" id="libraryGrid"></div>
+
+        </section>
+
+
+        <!-- ================= SHOP ================= -->
+
+        <section id="shop" class="page">
+
+            <div class="topbar">
+
+                <div>
+                    <div class="page-title">
+                        Shop
+                    </div>
+
+                    <div class="page-subtitle">
+                        Vyro launcher features
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="shop-grid">
+
+                <div class="shop-card">
+
+                    <div class="shop-icon">
+                        ⚡
+                    </div>
+
+                    <h3>
+                        OGFN Builds
+                    </h3>
+
+                    <p>
+                        Add and manage your local OGFN builds
+                        directly from the launcher.
+                    </p>
+
+                </div>
+
+
+                <div class="shop-card">
+
+                    <div class="shop-icon">
+                        ✦
+                    </div>
+
+                    <h3>
+                        Vyro Premium
+                    </h3>
+
+                    <p>
+                        Premium launcher features can be
+                        added here later.
+                    </p>
+
+                </div>
+
+
+                <div class="shop-card">
+
+                    <div class="shop-icon">
+                        ◈
+                    </div>
+
+                    <h3>
+                        Cosmetics
+                    </h3>
+
+                    <p>
+                        Future cosmetic and profile
+                        customization section.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= SETTINGS ================= -->
+
+        <section id="settings" class="page">
+
+            <div class="topbar">
+
+                <div>
+                    <div class="page-title">
+                        Settings
+                    </div>
+
+                    <div class="page-subtitle">
+                        Configure Vyro
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="settings-box">
+
+                <div class="setting">
+
+                    <div>
+                        <h3>
+                            Remember Login
+                        </h3>
+
+                        <p>
+                            Keep your local launcher session.
+                        </p>
+                    </div>
+
+                    <div class="switch on"
+                         onclick="toggleSwitch(this)">
+                    </div>
+
+                </div>
+
+
+                <div class="setting">
+
+                    <div>
+                        <h3>
+                            Hardware Acceleration
+                        </h3>
+
+                        <p>
+                            Use GPU acceleration for the interface.
+                        </p>
+                    </div>
+
+                    <div class="switch on"
+                         onclick="toggleSwitch(this)">
+                    </div>
+
+                </div>
+
+
+                <div class="setting">
+
+                    <div>
+                        <h3>
+                            Discord Rich Presence
+                        </h3>
+
+                        <p>
+                            Show your current Vyro activity.
+                        </p>
+                    </div>
+
+                    <div class="switch"
+                         onclick="toggleSwitch(this)">
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ================= LOGIN ================= -->
+
+<div class="login-screen show" id="loginScreen">
+
+    <div class="login-left">
+
+        <div class="login-logo">
+            V
+        </div>
+
+        <div class="login-title">
+            Sign In
+        </div>
+
+
+        <!--
+            These fields are only for a future Vyro account system.
+            DO NOT collect Discord passwords here.
+        -->
+
+        <label class="input-label">
+            Email
+        </label>
+
+        <input
+            class="input"
+            id="email"
+            type="email"
+            placeholder="Email Address"
+        >
+
+
+        <label class="input-label">
+            Password
+        </label>
+
+        <input
+            class="input"
+            id="password"
+            type="password"
+            placeholder="Password"
+        >
+
+
+        <label class="remember">
+            <input type="checkbox">
+            Remember Me
+        </label>
+
+
+        <button class="sign-in"
+                onclick="normalLogin()">
+            Sign In
+        </button>
+
+
+        <div class="or">
+            <div></div>
+            or
+            <div></div>
+        </div>
+
+
+        <button class="discord"
+                onclick="discordLogin()">
+            ◉ &nbsp; Sign in with Discord
+        </button>
+
+
+        <div class="login-links">
+
+            <span onclick="openDiscordServer()">
+                Check Out The Server?
+            </span>
+
+            <span onclick="createAccount()">
+                Create Account
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="login-background"></div>
+
+</div>
+
+
+<!-- ================= ADD BUILD MODAL ================= -->
+
+<div class="modal" id="buildModal">
+
+    <div class="modal-box">
+
+        <h2>
+            Add OGFN Build
+        </h2>
+
+        <input
+            class="modal-input"
+            id="buildName"
+            placeholder="Build name"
+        >
+
+        <input
+            class="modal-input"
+            id="buildVersion"
+            placeholder="Version e.g. 7.30"
+        >
+
+        <input
+            class="modal-input"
+            id="buildPath"
+            placeholder="Game executable path"
+        >
+
+        <div class="modal-buttons">
+
+            <button class="cancel"
+                    onclick="closeBuildModal()">
+                Cancel
+            </button>
+
+            <button class="confirm"
+                    onclick="addBuild()">
+                Add Build
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="toast" id="toast">
+    Saved
+</div>
+
+
+<script>
+
+/* =========================================================
+   VYRO CONFIG
+========================================================= */
+
+/*
+    DISCORD OAUTH
+
+    Create a Discord application at:
+    https://discord.com/developers/applications
+
+    Then put your Client ID below.
+
+    IMPORTANT:
+    Discord OAuth needs a proper redirect URL/backend for
+    production authentication. Do NOT put a Discord bot token
+    or client secret in this HTML file.
+*/
+
+const DISCORD_CLIENT_ID = "YOUR_DISCORD_CLIENT_ID";
+
+const DISCORD_REDIRECT_URI =
+    "http://localhost:3000/discord-callback";
+
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+function showPage(page, button) {
+
+    document.querySelectorAll(".page").forEach(p => {
+        p.classList.remove("active");
+    });
+
+    const target = document.getElementById(page);
+
+    if (target) {
+        target.classList.add("active");
+    }
+
+    document.querySelectorAll(".nav button").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    if (button) {
+        button.classList.add("active");
+    }
+
+    if (page === "library") {
+        renderLibrary();
+    }
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+function normalLogin() {
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    if (!email || !password) {
+        showToast("Enter your email and password.");
+        return;
+    }
+
+    /*
+        Demo login only.
+
+        Replace this with YOUR OWN secure backend
+        authentication system.
+
+        Never store real passwords in localStorage.
+    */
+
+    localStorage.setItem(
+        "vyroUser",
+        JSON.stringify({
+            username: email.split("@")[0],
+            avatar: email.charAt(0).toUpperCase()
+        })
+    );
+
+    enterLauncher();
+}
+
+
+/* =========================================================
+   DISCORD LOGIN
+========================================================= */
+
+function discordLogin() {
+
+    if (DISCORD_CLIENT_ID === "YOUR_DISCORD_CLIENT_ID") {
+
+        showToast(
+            "Add your Discord Client ID in the code first."
+        );
+
+        return;
+    }
+
+    const scopes = encodeURIComponent(
+        "identify email"
+    );
+
+    const url =
+        "https://discord.com/oauth2/authorize" +
+        "?client_id=" +
+        encodeURIComponent(DISCORD_CLIENT_ID) +
+        "&response_type=code" +
+        "&redirect_uri=" +
+        encodeURIComponent(DISCORD_REDIRECT_URI) +
+        "&scope=" +
+        scopes;
+
+    window.location.href = url;
+}
+
+
+/* =========================================================
+   ENTER LAUNCHER
+========================================================= */
+
+function enterLauncher() {
+
+    document
+        .getElementById("loginScreen")
+        .classList.remove("show");
+
+    loadUser();
+
+    renderLibrary();
+}
+
+
+/* =========================================================
+   USER
+========================================================= */
+
+function loadUser() {
+
+    const saved =
+        localStorage.getItem("vyroUser");
+
+    if (!saved) return;
+
+    try {
+
+        const user = JSON.parse(saved);
+
+        document.getElementById("username")
+            .textContent =
+            user.username || "User";
+
+        document.getElementById("avatar")
+            .textContent =
+            user.avatar || "V";
+
+    } catch (e) {
+
+        console.log(e);
+
+    }
+}
+
+
+function logout() {
+
+    localStorage.removeItem("vyroUser");
+
+    document
+        .getElementById("loginScreen")
+        .classList.add("show");
+
+    showToast("Logged out.");
+}
+
+
+/* =========================================================
+   BUILD STORAGE
+========================================================= */
+
+let builds =
+    JSON.parse(
+        localStorage.getItem("vyroBuilds") || "[]"
+    );
+
+
+/* Default build */
+
+if (builds.length === 0) {
+
+    builds.push({
+        id: Date.now(),
+        name: "OGFN",
+        version: "14.30",
+        path: "",
+        active: true
+    });
+
+    saveBuilds();
+}
+
+
+function saveBuilds() {
+
+    localStorage.setItem(
+        "vyroBuilds",
+        JSON.stringify(builds)
+    );
+}
+
+
+/* =========================================================
+   RENDER LIBRARY
+========================================================= */
+
+function renderLibrary() {
+
+    const grid =
+        document.getElementById("libraryGrid");
+
+    if (!grid) return;
+
+    grid.innerHTML = "";
+
+    builds.forEach(build => {
+
+        const card =
+            document.createElement("div");
+
+        card.className = "build-card";
+
+        card.innerHTML = `
+
+            <div class="build-image">
+
+                ${
+                    build.active
+                    ? `<div class="active-label">ACTIVE</div>`
+                    : ""
+                }
+
+            </div>
+
+            <div class="build-info">
+
+                <div class="build-name">
+                    ${escapeHTML(build.name)}
+                </div>
+
+                <div class="build-version">
+                    ${escapeHTML(build.version)}
+                </div>
+
+                <div class="build-actions">
+
+                    <button
+                        class="play"
+                        onclick="selectBuild(${build.id})">
+                        ▶ Play
+                    </button>
+
+                    <button
+                        class="delete"
+                        onclick="deleteBuild(${build.id})">
+                        🗑
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+        grid.appendChild(card);
+
+    });
+}
+
+
+/* =========================================================
+   SELECT BUILD
+========================================================= */
+
+function selectBuild(id) {
+
+    const build =
+        builds.find(b => b.id === id);
+
+    if (!build) return;
+
+    builds.forEach(b => {
+        b.active = false;
+    });
+
+    build.active = true;
+
+    saveBuilds();
+
+    document.getElementById("selectedBuild")
+        .textContent =
+        build.name + " • " + build.version;
+
+    showToast(
+        build.name + " selected."
+    );
+
+    renderLibrary();
+}
+
+
+/* =========================================================
+   PLAY
+========================================================= */
+
+function playSelected() {
+
+    const build =
+        builds.find(b => b.active);
+
+    if (!build) {
+
+        showToast("Select a build first.");
+
+        return;
+    }
+
+    if (!build.path) {
+
+        showToast(
+            "Add the Fortnite executable path first."
+        );
+
+        return;
+    }
+
+    /*
+        A normal browser cannot directly launch a local
+        .exe for security reasons.
+
+        When packaged as Electron, you can replace this
+        section with child_process.spawn().
+    */
+
+    showToast(
+        "Build ready: " + build.name
+    );
+}
+
+
+/* =========================================================
+   ADD BUILD
+========================================================= */
+
+function openBuildModal() {
+
+    document
+        .getElementById("buildModal")
+        .classList.add("show");
+}
+
+
+function closeBuildModal() {
+
+    document
+        .getElementById("buildModal")
+        .classList.remove("show");
+}
+
+
+function addBuild() {
+
+    const name =
+        document.getElementById("buildName")
+            .value.trim();
+
+    const version =
+        document.getElementById("buildVersion")
+            .value.trim();
+
+    const path =
+        document.getElementById("buildPath")
+            .value.trim();
+
+    if (!name || !version) {
+
+        showToast(
+            "Enter a build name and version."
+        );
+
+        return;
+    }
+
+    builds.push({
+
+        id: Date.now(),
+
+        name: name,
+
+        version: version,
+
+        path: path,
+
+        active: false
+
+    });
+
+    saveBuilds();
+
+    closeBuildModal();
+
+    renderLibrary();
+
+    document.getElementById("buildName")
+        .value = "";
+
+    document.getElementById("buildVersion")
+        .value = "";
+
+    document.getElementById("buildPath")
+        .value = "";
+
+    showToast(
+        name + " added to Library."
+    );
+}
+
+
+/* =========================================================
+   DELETE BUILD
+========================================================= */
+
+function deleteBuild(id) {
+
+    builds =
+        builds.filter(
+            build => build.id !== id
+        );
+
+    if (builds.length > 0 &&
+        !builds.some(b => b.active)) {
+
+        builds[0].active = true;
+    }
+
+    saveBuilds();
+
+    renderLibrary();
+
+    showToast("Build removed.");
+}
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+function toggleSwitch(element) {
+
+    element.classList.toggle("on");
+
+}
+
+
+/* =========================================================
+   OTHER BUTTONS
+========================================================= */
+
+function createAccount() {
+
+    showToast(
+        "Account registration can be connected to your backend."
+    );
+}
+
+
+function openDiscordServer() {
+
+    /*
+        Replace with your actual Discord server invite.
+    */
+
+    window.open(
+        "https://discord.com",
+        "_blank"
+    );
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message) {
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    setTimeout(() => {
+
+        toast.classList.remove("show");
+
+    }, 2500);
+}
+
+
+/* =========================================================
+   SECURITY / HTML
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+
+        .replaceAll("&", "&amp;")
+
+        .replaceAll("<", "&lt;")
+
+        .replaceAll(">", "&gt;")
+
+        .replaceAll('"', "&quot;")
+
+        .replaceAll("'", "&#039;");
+}
+
+
+/* =========================================================
+   STARTUP
+========================================================= */
+
+window.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        loadUser();
+
+        renderLibrary();
+
+        /*
+            For the first test the login screen is shown.
+
+            After you've logged in once, you can change this
+            behavior to automatically enter the launcher.
+        */
+    }
+);
+
+</script>
+
+</body>
+</html>
